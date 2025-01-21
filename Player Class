@@ -1,0 +1,42 @@
+public class Player {
+        
+    private String name;
+    private boolean isInMatch;
+    private int gamesPlayed;
+    private int gamesWon;
+
+    public Player(String name) {
+        this.name = name;
+        this.isInMatch = false;
+        this.gamesPlayed = 0;
+        this.gamesWon = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isInMatch() {
+        return isInMatch;
+    }
+
+    public void setInMatch(boolean inMatch) {
+        this.isInMatch = inMatch;
+    }
+
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void incrementGamesPlayed() {
+        this.gamesPlayed++;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public void incrementGamesWon() {
+        this.gamesWon++;
+    }
+}
