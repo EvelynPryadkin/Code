@@ -1,0 +1,53 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+public class TournamentController {
+    private ObservableList<Player> players = FXCollections.observableArrayList();
+    private ObservableList<Match> matches = FXCollections.observableArrayList();
+
+    public void registerPlayer(String name) {
+        Player newPlayer = new Player(name);
+        players.add(newPlayer);
+
+        // Generate matches with all existing players
+        for (Player player : players) {
+            if (!player.equals(newPlayer)) {
+                matches.add(new Match(player, newPlayer));
+            }
+        }
+    }
+
+    public ObservableList<Match> getActiveMatches() {
+        return matches.filtered(match -> match.getStatus() == Match.Status.ACTIVE);
+    }
+
+    public void generateMatches() {
+        for (Match match : matches) {
+            if (match.getStatus() == Match.Status.CREATED &&
+                !match.getPlayer1().isInMatch() &&
+                !match.getPlayer2().isInMatch()) {
+
+                match.setStatus(Match.Status.ACTIVE);
+                match.getPlayer1().setInMatch(true);
+                match.getPlayer2().setInMatch(true);
+            }
+        }
+    }
+
+    public void recordMatchWinner(Match match, Player winner) {
+        match.setStatus(Match.Status.COMPLETED);
+        match.getPlayer1().setInMatch(false);
+        match.getPlayer2().setInMatch(false);
+
+        winner.incrementGamesWon();
+        match.getPlayer1().incrementGamesPlayed();
+        match.getPlayer2().incrementGamesPlayed();
+
+        // Sort players by number of games won
+        FXCollections.sort(players, (p1, p2) -> Integer.compare(p2.getGamesWon(), p1.getGamesWon()));
+    }
+
+    public ObservableList<Player> getLeaderboard() {
+        return players;
+    }
+}
